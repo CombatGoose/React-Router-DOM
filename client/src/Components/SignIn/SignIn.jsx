@@ -6,17 +6,34 @@ const SignIn = () => {
 
     const { register, handleSubmit } = useForm()
     const [resultEl, setResultEl] = useState([])
+    const [inputValue, setInputValue] = useState('')
 
-    const onSubmit = (data) => { 
+    const handleDelete = (index) => {
+        const updatedResultEl = resultEl.filter((el, i) => i !== index)
+        setResultEl(updatedResultEl) 
+      }
+
+    const onChangeSubmit = (newData) => {
+        console.log(newData)
+    }
+
+    const onSubmit = (data) => {
+        console.log(data) 
         const resultDiv = (
-            <div>
+            <form onSubmit={handleSubmit(onChangeSubmit)}>
 
                 <h3>{data.name}</h3>
                 <p>{data.sum}</p>
+                <input 
+                type="text" 
+                placeholder="Change name"
+                name="newName"
+                {...register("newName",{required:true})}
+                 />
+                <button type="submit" onClick={() => handleDelete(resultEl.length)}>Delete</button>
                 
-            </div>
+            </form>
         )
-
         setResultEl([...resultEl, resultDiv])
 
     }
