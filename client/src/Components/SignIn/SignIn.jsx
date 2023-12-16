@@ -1,41 +1,12 @@
 import s from "./signIn.module.scss"
 
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
-const SignIn = () => { 
+const SignIn = (props) => { 
 
     const { register, handleSubmit } = useForm()
-    const [resultEl, setResultEl] = useState([])
-    const [inputValue, setInputValue] = useState('')
-
-    const handleDelete = (index) => {
-        const updatedResultEl = resultEl.filter((el, i) => i !== index)
-        setResultEl(updatedResultEl) 
-      }
-
-    const onChangeSubmit = (newData) => {
-        console.log(newData)
-    }
 
     const onSubmit = (data) => {
-        console.log(data) 
-        const resultDiv = (
-            <form onSubmit={handleSubmit(onChangeSubmit)}>
-
-                <h3>{data.name}</h3>
-                <p>{data.sum}</p>
-                <input 
-                type="text" 
-                placeholder="Change name"
-                name="newName"
-                {...register("newName",{required:true})}
-                 />
-                <button type="submit" onClick={() => handleDelete(resultEl.length)}>Delete</button>
-                
-            </form>
-        )
-        setResultEl([...resultEl, resultDiv])
-
+        props.setNewProduct(data)
     }
     
     return (
@@ -54,7 +25,7 @@ const SignIn = () => {
                         className={s.form_item_input}
                         placeholder="Name"
                         name="name"
-                        {...register("name",{required:true})}
+                        {...register("name",{ pattern: /^[A-Za-z]+$/i, maxLength: 20 })}
                     />
 
                 </div>
@@ -64,11 +35,11 @@ const SignIn = () => {
                     <p className={s.form_item_text}>Entry Cost</p>
 
                     <input
-                        type="text"
+                        type="number"
                         className={s.form_item_input}
                         placeholder="Cost"
                         name="sum"
-                        {...register("sum", {required: true})}
+                        {...register("sum", { min: 1, max: 10 })}
                     />
 
                 </div>
@@ -76,14 +47,6 @@ const SignIn = () => {
                 <button type="submit" className={s.form_btn}>Submit</button>
 
             </form>
-
-        {
-            resultEl && (
-                <div className={s.result}>
-                    {resultEl}
-                </div>
-            )
-        }
 
         </div>
 
